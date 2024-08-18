@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
+import numpy as np
 
 def load_data(file_path):
     """
@@ -28,7 +29,11 @@ def preprocess_data(df):
     df = df[['Date', 'Open', 'High', 'Low', 'Close']]
     
     # Convert Date to datetime format and sort by date
-    df['Date'] = pd.to_datetime(df['Date'])
+    # df['Date'] = pd.to_datetime(df['Date'])
+    
+    # Convert date to number of days since a reference date (e.g., '2014-08-15')
+    df['Date'] = (pd.to_datetime(df['Date']) - pd.to_datetime('2014-08-15')).dt.days
+
     df.sort_values(by='Date', inplace=True)
     df.reset_index(drop=True, inplace=True)
 
@@ -37,32 +42,14 @@ def preprocess_data(df):
 
     # Scale the features
     scaler = MinMaxScaler()
-    df[['Open', 'High', 'Low', 'Close']] = scaler.fit_transform(df[['Open', 'High', 'Low', 'Close']])
+    scaled_data = scaler.fit_transform(df[['Date', 'Open', 'High', 'Low', 'Close']])
 
     # Prepare input (X) and output (y)
     X = []
     y = []
 
-    for i in range(len(df) - 1):
-        X.append(df[['Open', 'High', 'Low', 'Close']].iloc[i].values)
-        y.append(df['Close'].iloc[i + 1])
+    for i in range(len(scaled_data) - 1):
+        X.append(scaled_data[i])
+        y.append(scaled_data[i + 1][-1])  # Next day's closing price
 
-    # Convert to numpy arrays for model training
-    X = pd.DataFrame(X, columns=['Open', 'High', 'Low', 'Close']).to_numpy()
-    y = pd.Series(y, name='Next_Close').to_numpy()
-
-    return X, y
-"""
-if __name__ == "__main__":
-    # File path to the CSV file in the data folder
-    file_path = '~/stock-market-prediction-ANN/data/NIFTY50_Historical_PR_15082014to15082024.csv'
-
-    # Load and preprocess the data
-    df = load_data(file_path)
-    X, y = preprocess_data(df)
-
-    # Print shapes to verify
-    print(f"Input shape: {X.shape}")
-    print(f"Output shape: {y.shape}")
-"""
-
+    return np.array(X), np.array(y), scaler

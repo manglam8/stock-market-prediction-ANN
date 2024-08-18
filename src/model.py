@@ -27,3 +27,4 @@ def build_model(input_shape):
     model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae'])
     
     return model
+

@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # Load and preprocess data
     file_path = 'data/NIFTY50_Historical_PR_15082014to15082024.csv'
     df = load_data(file_path)
-    X, y = preprocess_data(df)
+    X, y, scaler = preprocess_data(df)
     
     # Split the data into training and testing sets
     _, X_test, _, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
