@@ -33,33 +33,3 @@ This project aims to predict the Nifty50 index's closing price for following day
 5. Evaluate model (used Mean Absolute Error to measure accuracy)
 6. Deploy model (used Flask for a web interface)
 7. Iterate and improve (update : now able to store more comprehensive feedback data for potential retraining.)
-
---------------------------------------
-
-The current project structure is :
-
-.
-├── README.md
-├── data
-│   ├── NIFTY50_Historical_PR_15082014to15082024.csv
-│   └── feedback_data.csv
-├── flask_app.py
-├── models
-│   ├── scaler.pkl
-│   └── stock_price_model.h5
-├── notebooks
-├── requirements.txt
-├── src
-│   ├── __pycache__
-│   │   ├── data_preprocessing.cpython-311.pyc
-│   │   └── model.cpython-311.pyc
-│   ├── data_preprocessing.py
-│   ├── evaluate.py
-│   ├── model.py
-│   └── train.py
-├── static
-│   └── prediction_plot.png
-└── templates
-    └── index.html
-
----------------------------------------------
