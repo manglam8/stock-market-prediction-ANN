@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import pickle
 import os
+import csv
 
 # Use non-GUI backend for Matplotlib
 matplotlib.use('Agg')
@@ -70,9 +71,33 @@ def predict():
 
 @app.route('/feedback', methods=['POST'])
 def feedback():
-    actual_price = float(request.form['actual_price'])
+    # Get the data from the feedback form
+    date = request.form['next_date']
+    open_price = float(request.form['next_open_price'])
+    high_price = float(request.form['next_high_price'])
+    low_price = float(request.form['next_low_price'])
+    actual_close_price = float(request.form['actual_close_price'])
 
-    # Optional: Store feedback and use it for retraining
+
+    # Create or append to feedback_data.csv
+    feedback_file = 'data/feedback_data.csv'
+    file_exists = os.path.isfile(feedback_file)
+
+    # Append the data to the CSV
+    with open(feedback_file, 'a', newline='') as csvfile:
+        fieldnames = ['Date', 'Open', 'High', 'Low', 'Close']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        
+        if not file_exists:
+            writer.writeheader()  # Write the header only if the file is new
+        
+        writer.writerow({
+            'Date': date,
+            'Open': open_price,
+            'High': high_price,
+            'Low': low_price,
+            'Close': actual_close_price
+        })
 
     return "Thank you for your feedback!"
 
@@ -80,5 +105,7 @@ if __name__ == "__main__":
     # Ensure the 'static' folder exists for plot saving
     if not os.path.exists('static'):
         os.makedirs('static')
+    if not os.path.exists('data'):
+        os.makedirs('data')
     
     app.run(debug=True)

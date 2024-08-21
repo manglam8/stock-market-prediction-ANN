@@ -9,26 +9,41 @@
     <h1>Stock Price Prediction</h1>
     <form method="POST" action="/predict">
         <label for="date">Date:</label>
-        <input type="date" name="date" required><br>
+        <input type="date" name="date" required><br><br>
         <label for="open_price">Open Price:</label>
-        <input type="number" step="any" name="open_price" required><br>
+        <input type="number" step="any" name="open_price" required><br><br>
         <label for="close_price">Close Price:</label>
-        <input type="number" step="any" name="close_price" required><br>
+        <input type="number" step="any" name="close_price" required><br><br>
         <label for="high_price">High Price:</label>
-        <input type="number" step="any" name="high_price" required><br>
+        <input type="number" step="any" name="high_price" required><br><br>
         <label for="low_price">Low Price:</label>
-        <input type="number" step="any" name="low_price" required><br>
+        <input type="number" step="any" name="low_price" required><br><br>
         <button type="submit">Predict</button>
     </form>
 
     {% if prediction %}
         <h2>Next Day's Predicted Close Price: {{ prediction }}</h2>
-        <img src="{{ plot_url }}" alt="Prediction Plot">
-        <form method="POST" action="/feedback">
-            <label for="actual_price">Actual Close Price (for feedback):</label>
-            <input type="number" step="any" name="actual_price" required><br>
+        <img src="{{ plot_url }}" alt="Prediction Plot"><br><br>
+        <h3>Provide Feedback</h3>
+        <form action="/feedback" method="POST">
+            <label for="next_date">Next Day's Date:</label>
+            <input type="date" id="next_date" name="next_date" required><br><br>
+
+            <label for="next_open_price">Next Day's Open Price:</label>
+            <input type="number" id="next_open_price" name="next_open_price" step="any" required><br><br>
+
+            <label for="next_high_price">Next Day's High Price:</label>
+            <input type="number" id="next_high_price" name="next_high_price" step="any" required><br><br>
+
+            <label for="next_low_price">Next Day's Low Price:</label>
+            <input type="number" id="next_low_price" name="next_low_price" step="any" required><br><br>
+
+            <label for="actual_close_price">Next Day's Actual Close Price:</label>
+            <input type="number" id="actual_close_price" name="actual_close_price" step="any" required><br><br>
+
             <button type="submit">Submit Feedback</button>
         </form>
     {% endif %}
+
 </body>
 </html>
